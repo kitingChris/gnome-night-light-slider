@@ -3,6 +3,8 @@
 GNOME Shell extension that adds a Night Light intensity slider to Quick
 Settings, directly below the brightness slider.
 
+![Night Light slider below the brightness slider in Quick Settings](docs/screenshot.png)
+
 - Drag right for a warmer screen (1700 K), left for no tint (6500 K).
 - Click the moon icon to turn Night Light on or off. While it is off, the
   slider is dimmed.
