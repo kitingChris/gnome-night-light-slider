@@ -1,0 +1,7 @@
+{
+  "uuid": "night-light-slider@c-ego.net",
+  "name": "Night Light Slider",
+  "description": "Adds a Night Light intensity slider to Quick Settings, directly below the brightness slider. Click the moon icon to toggle Night Light.",
+  "shell-version": ["48", "49", "50"],
+  "version": 1
+}
