@@ -64,12 +64,16 @@ class NightLightSlider extends QuickSlider {
                 !this._settings.get_boolean(ENABLED_KEY));
         });
 
-        // QuickSlider always creates a (here unused) menu that lives in the
-        // Quick Settings overlay, not under this actor.
-        this.connect('destroy', () => this.menu.destroy());
-
         this._syncValue();
         this._syncEnabled();
+    }
+
+    destroy() {
+        // QuickSlider always creates a (here unused) menu that lives in the
+        // Quick Settings overlay, not under this actor.
+        this.menu.destroy();
+        super.destroy();
+        this._settings = null;
     }
 
     _onSliderChanged() {
