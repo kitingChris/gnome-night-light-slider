@@ -58,7 +58,7 @@ class NightLightSlider extends QuickSlider {
             this, 'visible',
             GObject.BindingFlags.SYNC_CREATE);
 
-        this._settings = new Gio.Settings({settings_schema: lookupColorSchema()});
+        this._settings = Gio.Settings.new_full(lookupColorSchema(), null, null);
         this._settings.connectObject(
             `changed::${TEMPERATURE_KEY}`, () => this._syncValue(),
             `changed::${ENABLED_KEY}`, () => this._syncEnabled(),
