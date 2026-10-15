@@ -16,6 +16,8 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {QuickSlider, SystemIndicator} from 'resource:///org/gnome/shell/ui/quickSettings.js';
 
+// System schema provided by gnome-settings-daemon. The extension ships no
+// schema of its own, so there is no schemas/ directory in the ZIP.
 const COLOR_SCHEMA = 'org.gnome.settings-daemon.plugins.color';
 const ENABLED_KEY = 'night-light-enabled';
 const TEMPERATURE_KEY = 'night-light-temperature';
@@ -25,6 +27,10 @@ const TEMPERATURE_KEY = 'night-light-temperature';
 const WARMEST = 1700;
 const COOLEST = 6500;
 const STEP = 10;
+
+function lookupColorSchema() {
+    return Gio.SettingsSchemaSource.get_default().lookup(COLOR_SCHEMA, true);
+}
 
 function temperatureToValue(kelvin) {
     const clamped = Math.min(Math.max(kelvin, WARMEST), COOLEST);
@@ -52,7 +58,7 @@ class NightLightSlider extends QuickSlider {
             this, 'visible',
             GObject.BindingFlags.SYNC_CREATE);
 
-        this._settings = new Gio.Settings({schema_id: COLOR_SCHEMA});
+        this._settings = new Gio.Settings({settings_schema: lookupColorSchema()});
         this._settings.connectObject(
             `changed::${TEMPERATURE_KEY}`, () => this._syncValue(),
             `changed::${ENABLED_KEY}`, () => this._syncEnabled(),
@@ -111,6 +117,11 @@ class Indicator extends SystemIndicator {
 
 export default class NightLightSliderExtension extends Extension {
     enable() {
+        if (!lookupColorSchema()) {
+            console.error(`${this.metadata.name}: schema ${COLOR_SCHEMA} not found; ` +
+                'gnome-settings-daemon is required');
+            return;
+        }
         this._addWhenReady();
     }
 
